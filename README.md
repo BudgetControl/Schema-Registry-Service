@@ -26,6 +26,7 @@ Consider a microservices architecture for an e-commerce platform:
 
 ```
 // Example of a schema registry response
+Entries::getSchema();
 {
   "table": "products",
   "columns": {
