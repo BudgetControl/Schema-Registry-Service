@@ -39,7 +39,7 @@ final class EntriesTable extends AbstractMigration
             ->addColumn('transfer_id', 'integer', [ 'signed' => false, 'null' => true])
             ->addColumn('transfer_relation', 'string', ['limit' => 255, 'null' => true])
             ->addColumn('currency_id','integer', [ 'signed' => false, 'null' => false])
-            ->addColumn('payment_type_id','integer', [ 'signed' => false, 'null' => false, 'default' => 1])
+            ->addColumn('payment_type','integer', [ 'signed' => false, 'null' => false, 'default' => 1])
             ->addColumn('payee_id','integer', [ 'signed' => false, 'null' => true])
             ->addColumn('waranty', 'boolean', ['default' => false])
             ->addColumn('geolocation', 'point', ['null' => true])
