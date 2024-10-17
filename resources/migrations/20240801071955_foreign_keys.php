@@ -41,7 +41,7 @@ final class ForeignKeys extends AbstractMigration
             ->addForeignKey('payee_id', 'payees', 'id', ['delete' => 'RESTRICT', 'update' => 'CASCADE'])
             ->addForeignKey('category_id', 'sub_categories', 'id', ['delete' => 'RESTRICT', 'update' => 'CASCADE'])
             ->addForeignKey('currency_id', 'currencies', 'id', ['delete' => 'RESTRICT', 'update' => 'CASCADE'])
-            ->addForeignKey('payment_type_id', 'payments_types', 'id', ['delete' => 'RESTRICT', 'update' => 'CASCADE'])
+            ->addForeignKey('payment_type', 'payments_types', 'id', ['delete' => 'RESTRICT', 'update' => 'CASCADE'])
             ->update();
 
         $this->table('sub_categories')
