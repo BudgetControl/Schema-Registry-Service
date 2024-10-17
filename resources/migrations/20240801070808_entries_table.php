@@ -49,7 +49,7 @@ final class EntriesTable extends AbstractMigration
             ->addIndex(['account_id'])
             ->addIndex(['transfer_id'])
             ->addIndex(['currency_id'])
-            ->addIndex(['payment_type_id'])
+            ->addIndex(['payment_type'])
             ->addIndex(['payee_id'])
             ->addIndex(['workspace_id'])
             ->addIndex('id', ['unique' => true])
