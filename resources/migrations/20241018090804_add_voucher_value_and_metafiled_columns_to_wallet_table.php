@@ -17,13 +17,24 @@ final class AddVoucherValueAndMetafiledColumnsToWalletTable extends AbstractMigr
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change(): void
+    public function up(): void
     {
         $this->table('wallets')
             ->addColumn('voucher_value', 'float', ['null' => true])
             ->addColumn('metafield', 'json', ['null' => true])
             ->changeColumn('type', 'enum', [
                 'values' => ['bank', 'cache', 'credit-card', 'investment', 'loan', 'other', 'prepaid-card', 'credit-card-revolving', 'voucher'],
+                'null' => false
+            ])
+            ->update();
+    }
+
+    public function down(): void
+    {
+        $this->table('wallets')
+            ->removeColumn('voucher_value')
+            ->removeColumn('metafield')
+            ->changeColumn('type', 'string', [
                 'null' => false
             ])
             ->update();
