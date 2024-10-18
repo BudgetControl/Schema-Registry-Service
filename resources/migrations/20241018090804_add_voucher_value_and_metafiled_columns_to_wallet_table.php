@@ -22,6 +22,10 @@ final class AddVoucherValueAndMetafiledColumnsToWalletTable extends AbstractMigr
         $this->table('wallets')
             ->addColumn('voucher_value', 'float', ['null' => true])
             ->addColumn('metafield', 'json', ['null' => true])
+            ->changeColumn('type', 'enum', [
+                'values' => ['bank', 'cache', 'credit-card', 'investment', 'loan', 'other', 'prepaid-card', 'credit-card-revolving', 'voucher'],
+                'null' => false
+            ])
             ->update();
     }
 }
