@@ -23,7 +23,7 @@ final class BudgetTable extends AbstractMigration
             ->addColumn('uuid', 'string', ['limit' => 36, 'null' => false])
             ->addColumn('name', 'string')
             ->addColumn('description', 'text')
-            ->addColumn('amount', 'decimal', ['precision' => 10, 'scale' => 2])
+            ->addColumn('amount', 'float', ['null' => false])
             ->addColumn('configuration', 'json')
             ->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])

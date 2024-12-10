@@ -19,12 +19,11 @@ final class EntryLabelsTable extends AbstractMigration
      */
     public function change(): void
     {
-        $this->table('entry_labels', ['id' => false, 'primary_key' => ['entry_id', 'labels_id']])
+        $this->table('entry_labels', ['id' => false])
             ->addColumn('entry_id', 'integer', ['null' => false])
             ->addColumn('labels_id', 'integer', ['null' => false])
             ->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
-            ->addColumn('date_time', 'datetime')
             ->create();
     }
 }

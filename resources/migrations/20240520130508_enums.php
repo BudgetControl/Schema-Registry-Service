@@ -1,10 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class ModelLabelsTable extends AbstractMigration
+final class Enums extends AbstractMigration
 {
     /**
      * Change Method.
@@ -19,11 +18,8 @@ final class ModelLabelsTable extends AbstractMigration
      */
     public function change(): void
     {
-        $this->table('model_labels', ['id' => false, 'primary_key' => ['models_id', 'labels_id']])
-            ->addColumn('models_id', 'integer', ['null' => false])
-            ->addColumn('labels_id', 'integer', ['null' => false])
-            ->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
-            ->addColumn('updated_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
-            ->create();
+        $this->execute("CREATE TYPE wallet AS ENUM ('bank', 'cache', 'credit-card', 'investment', 'loan', 'other', 'prepaid-card', 'credit-card-revolving','voucher');");
+        $this->execute("CREATE TYPE entry AS ENUM ('expenses', 'incoming', 'saving', 'investments', 'debit','transfer');");
+        $this->execute("CREATE TYPE planning AS ENUM ('daily', 'weekly', 'monthly', 'yearly', 'once-shot', 'recursively');");
     }
 }

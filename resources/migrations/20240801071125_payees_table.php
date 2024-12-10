@@ -23,7 +23,6 @@ final class PayeesTable extends AbstractMigration
             ->addColumn('workspace_id','integer', [ 'signed' => false, 'null' => false])
             ->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
-            ->addColumn('date_time', 'datetime')
             ->addColumn('deleted_at', 'datetime', ['null' => true])
             ->addColumn('uuid', 'string', ['limit' => 36, 'null' => false])
             ->addColumn('name', 'string')

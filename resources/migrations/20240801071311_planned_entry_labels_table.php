@@ -24,7 +24,6 @@ final class PlannedEntryLabelsTable extends AbstractMigration
             ->addColumn('labels_id', 'integer', ['null' => false])
             ->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
-            ->addColumn('date_time', 'datetime')
             ->create();
     }
 }

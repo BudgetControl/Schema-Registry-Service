@@ -22,7 +22,6 @@ final class SubCategoriesTable extends AbstractMigration
         $this->table('sub_categories')
             ->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
-            ->addColumn('date_time', 'datetime')
             ->addColumn('uuid', 'string', ['limit' => 36, 'null' => false])
             ->addColumn('name', 'string')
             ->addColumn('category_id','integer', [ 'signed' => false, 'null' => false])

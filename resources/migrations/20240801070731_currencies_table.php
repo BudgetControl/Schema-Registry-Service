@@ -22,7 +22,6 @@ final class CurrenciesTable extends AbstractMigration
         $this->table('currencies')
             ->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
-            ->addColumn('date_time', 'datetime')
             ->addColumn('name', 'string')
             ->addColumn('deleted_at', 'datetime', ['null' => true])
             ->addColumn('label', 'string')

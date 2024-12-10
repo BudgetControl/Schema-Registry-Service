@@ -22,7 +22,6 @@ final class LabelsTable extends AbstractMigration
         $this->table('labels')
             ->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
-            ->addColumn('date_time', 'datetime')
             ->addColumn('uuid', 'string', ['limit' => 36, 'null' => false])
             ->addColumn('name', 'string', ['limit' => 255])
             ->addColumn('color', 'string', ['limit' => 7])
