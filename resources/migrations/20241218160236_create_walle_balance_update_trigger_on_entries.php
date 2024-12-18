@@ -1,9 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class CreateWalletTrigger extends AbstractMigration
+final class CreateWalleBalanceUpdateTriggerOnEntries extends AbstractMigration
 {
     /**
      * Change Method.
