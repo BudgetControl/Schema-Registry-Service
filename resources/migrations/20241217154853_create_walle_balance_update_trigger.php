@@ -16,7 +16,7 @@ final class CreateWalletTrigger extends AbstractMigration
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change(): void
+    public function up(): void
     {
 
       $stm = "CREATE OR REPLACE FUNCTION update_wallet_balance()
@@ -91,5 +91,11 @@ final class CreateWalletTrigger extends AbstractMigration
         AFTER INSERT OR UPDATE OR DELETE ON entries
         FOR EACH ROW
         EXECUTE FUNCTION update_wallet_balance();");
+    }
+
+    public function down(): void
+    {
+        $this->execute("DROP TRIGGER trigger_update_wallet_balance ON entries;");
+        $this->execute("DROP FUNCTION update_wallet_balance;");
     }
 }
