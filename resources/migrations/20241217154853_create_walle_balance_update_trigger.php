@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class Enums extends AbstractMigration
+final class CreateWalletTrigger extends AbstractMigration
 {
     /**
      * Change Method.
