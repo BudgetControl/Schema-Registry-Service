@@ -23,68 +23,68 @@ final class CreateWalleBalanceUpdateTriggerOnEntries extends AbstractMigration
       $stm = "CREATE OR REPLACE FUNCTION update_wallet_balance()
       RETURNS TRIGGER AS $$
       BEGIN
-          -- Caso DELETE: sottrai l'importo dal bilancio se l'entry era confermata e non pianificata
-          IF TG_OP = 'DELETE' THEN
-              IF OLD.confirmed = true AND OLD.planned = false THEN
-                  UPDATE wallets
-                  SET balance = balance - OLD.amount
-                  WHERE id = OLD.account_id;
-              END IF;
-              RETURN OLD;
-          END IF;
-      
-          -- Caso INSERT: aggiungi l'importo al bilancio se l'entry è confermata e non pianificata
-          IF TG_OP = 'INSERT' THEN
-              IF NEW.confirmed = true AND NEW.planned = false THEN
-                  UPDATE wallets
-                  SET balance = balance + NEW.amount
-                  WHERE id = NEW.account_id;
-              END IF;
-              RETURN NEW;
-          END IF;
-      
-          -- Caso UPDATE: gestisci le modifiche a amount, planned e confirmed
-          IF TG_OP = 'UPDATE' THEN
-              -- Se l'importo cambia e la entry è confermata, bilancia l'importo differenziale
-              IF OLD.amount <> NEW.amount AND OLD.confirmed = true THEN
-                  UPDATE wallets
-                  SET balance = balance - OLD.amount + NEW.amount
-                  WHERE id = NEW.account_id;
-              END IF;
-      
-              -- Caso 1: planned cambia da true a false
-              IF OLD.planned = true AND NEW.planned = false THEN
-                  UPDATE wallets
-                  SET balance = balance + NEW.amount
-                  WHERE id = NEW.account_id;
-              END IF;
-      
-              -- Caso 2: planned cambia da false a true
-              IF OLD.planned = false AND NEW.planned = true THEN
-                  UPDATE wallets
-                  SET balance = balance - NEW.amount
-                  WHERE id = NEW.account_id;
-              END IF;
-      
-              -- Caso 3: confirmed cambia da true a false
-              IF OLD.confirmed = true AND NEW.confirmed = false THEN
-                  UPDATE wallets
-                  SET balance = balance - NEW.amount
-                  WHERE id = NEW.account_id;
-              END IF;
-      
-              -- Caso 4: confirmed cambia da false a true
-              IF OLD.confirmed = false AND NEW.confirmed = true THEN
-                  UPDATE wallets
-                  SET balance = balance + NEW.amount
-                  WHERE id = NEW.account_id;
-              END IF;
-      
-              RETURN NEW;
-          END IF;
-      
-          RETURN NULL;
-      END;
+
+     -- Caso INSERT: aggiungi l'importo al bilancio se l'entry è confermata e non pianificata
+    	  IF TG_OP = 'INSERT' THEN
+    		  IF NEW.confirmed = true AND NEW.planned = false THEN
+    			  UPDATE wallets
+    			  SET balance = balance + NEW.amount
+    			  WHERE id = NEW.account_id;
+    		  END IF;
+    		  RETURN NEW;
+    	  END IF;
+        -- Caso DELETE logico: sottrai l'importo dal bilancio se l'entry era confermata e non pianificata
+        IF TG_OP = 'UPDATE' THEN
+            -- Controlla se `deleted_at` è passato da NULL a un valore (soft delete)
+            IF OLD.deleted_at IS NULL AND NEW.deleted_at IS NOT NULL THEN
+                IF OLD.confirmed = true AND OLD.planned = false THEN
+                    UPDATE wallets
+                    SET balance = balance - OLD.amount
+                    WHERE id = OLD.account_id;
+                END IF;
+            END IF;
+    
+            -- Altri casi di UPDATE (come già presenti)
+            -- Se l'importo cambia e la entry è confermata, bilancia l'importo differenziale
+            IF OLD.amount <> NEW.amount AND OLD.confirmed = true THEN
+                UPDATE wallets
+                SET balance = balance - OLD.amount + NEW.amount
+                WHERE id = NEW.account_id;
+            END IF;
+    
+            -- Caso 1: planned cambia da true a false
+            IF OLD.planned = true AND NEW.planned = false THEN
+                UPDATE wallets
+                SET balance = balance + NEW.amount
+                WHERE id = NEW.account_id;
+            END IF;
+    
+            -- Caso 2: planned cambia da false a true
+            IF OLD.planned = false AND NEW.planned = true THEN
+                UPDATE wallets
+                SET balance = balance - NEW.amount
+                WHERE id = NEW.account_id;
+            END IF;
+    
+            -- Caso 3: confirmed cambia da true a false
+            IF OLD.confirmed = true AND NEW.confirmed = false THEN
+                UPDATE wallets
+                SET balance = balance - NEW.amount
+                WHERE id = NEW.account_id;
+            END IF;
+    
+            -- Caso 4: confirmed cambia da false a true
+            IF OLD.confirmed = false AND NEW.confirmed = true THEN
+                UPDATE wallets
+                SET balance = balance + NEW.amount
+                WHERE id = NEW.account_id;
+            END IF;
+    
+            RETURN NEW;
+        END IF;
+    
+        RETURN NULL;
+    END;
       $$ LANGUAGE plpgsql;";
 
         $this->execute($stm);
