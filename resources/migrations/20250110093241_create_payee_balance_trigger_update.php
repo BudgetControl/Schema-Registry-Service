@@ -87,6 +87,7 @@ final class CreatePayeeBalanceTriggerUpdate extends AbstractMigration
         
             RETURN NULL;
         END IF;
+        RETURN NULL;
       END;
       $$ LANGUAGE plpgsql;";
 
