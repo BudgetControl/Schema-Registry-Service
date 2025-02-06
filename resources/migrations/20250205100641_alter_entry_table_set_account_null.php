@@ -20,6 +20,7 @@ final class AlterEntryTableSetAccountNull extends AbstractMigration
     public function change(): void
     {
         $this->table('entries')
+            ->changeColumn('transfer_to', 'integer', ['null' => true])
             ->changeColumn('account_id', 'integer', ['null' => true])
             ->update();
     }
