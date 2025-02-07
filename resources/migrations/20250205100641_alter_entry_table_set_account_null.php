@@ -17,10 +17,17 @@ final class AlterEntryTableSetAccountNull extends AbstractMigration
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change(): void
+    public function up(): void
     {
         $this->table('entries')
             ->changeColumn('account_id', 'integer', ['null' => true])
+            ->update();
+    }
+
+    public function down(): void
+    {
+        $this->table('entries')
+            ->changeColumn('account_id', 'integer', ['null' => false])
             ->update();
     }
 }
