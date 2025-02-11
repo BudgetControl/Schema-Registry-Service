@@ -46,7 +46,7 @@ final class CreateWalleBalanceUpdateTriggerOnEntries extends AbstractMigration
     
             -- Altri casi di UPDATE (come già presenti)
             -- Se l'importo cambia e la entry è confermata, bilancia l'importo differenziale
-            IF OLD.amount <> NEW.amount AND OLD.confirmed = true THEN
+            IF OLD.amount <> NEW.amount AND OLD.confirmed = true AND OLD.planned = false THEN
                 UPDATE wallets
                 SET balance = balance - OLD.amount + NEW.amount
                 WHERE id = NEW.account_id;
@@ -74,7 +74,7 @@ final class CreateWalleBalanceUpdateTriggerOnEntries extends AbstractMigration
             END IF;
     
             -- Caso 4: confirmed cambia da false a true
-            IF OLD.confirmed = false AND NEW.confirmed = true THEN
+            IF OLD.confirmed = false AND NEW.confirmed = true AND OLD.planned = false THEN
                 UPDATE wallets
                 SET balance = balance + NEW.amount
                 WHERE id = NEW.account_id;

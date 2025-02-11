@@ -48,7 +48,7 @@ final class CreatePayeeBalanceTriggerUpdate extends AbstractMigration
             -- Caso UPDATE: gestisci le modifiche a amount, planned e confirmed
             IF TG_OP = 'UPDATE' THEN
                 -- Se l'importo cambia e la entry è confermata, bilancia l'importo differenziale
-                IF OLD.amount <> NEW.amount AND OLD.confirmed = true THEN
+                IF OLD.amount <> NEW.amount AND OLD.confirmed = true AND OLD.planned = false THEN
                     UPDATE payees
                     SET balance = balance - OLD.amount + NEW.amount
                     WHERE id = NEW.payee_id;
@@ -76,7 +76,7 @@ final class CreatePayeeBalanceTriggerUpdate extends AbstractMigration
                 END IF;
         
                 -- Caso 4: confirmed cambia da false a true
-                IF OLD.confirmed = false AND NEW.confirmed = true THEN
+                IF OLD.confirmed = false AND NEW.confirmed = true AND OLD.planned = false THEN
                     UPDATE payees
                     SET balance = balance + NEW.amount
                     WHERE id = NEW.payee_id;
