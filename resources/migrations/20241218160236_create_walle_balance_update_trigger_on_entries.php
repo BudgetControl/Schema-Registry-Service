@@ -19,73 +19,88 @@ final class CreateWalleBalanceUpdateTriggerOnEntries extends AbstractMigration
      */
     public function up(): void
     {
-
-      $stm = "CREATE OR REPLACE FUNCTION update_wallet_balance()
-      RETURNS TRIGGER AS $$
-      BEGIN
-
-     -- Caso INSERT: aggiungi l'importo al bilancio se l'entry è confermata e non pianificata
-    	  IF TG_OP = 'INSERT' THEN
-    		  IF NEW.confirmed = true AND NEW.planned = false THEN
-    			  UPDATE wallets
-    			  SET balance = balance + NEW.amount
-    			  WHERE id = NEW.account_id;
-    		  END IF;
-    		  RETURN NEW;
-    	  END IF;
-        -- Caso DELETE logico: sottrai l'importo dal bilancio se l'entry era confermata e non pianificata
-        IF TG_OP = 'UPDATE' THEN
-            -- Controlla se `deleted_at` è passato da NULL a un valore (soft delete)
-            IF OLD.deleted_at IS NULL AND NEW.deleted_at IS NOT NULL THEN
-                IF OLD.confirmed = true AND OLD.planned = false THEN
+        $stm = "CREATE OR REPLACE FUNCTION update_wallet_balance()
+        RETURNS TRIGGER AS $$
+        BEGIN
+            -- Caso INSERT: aggiungi l'importo al bilancio se l'entry è confermata e non pianificata
+            IF TG_OP = 'INSERT' THEN
+                IF NEW.confirmed = true AND NEW.planned = false THEN
                     UPDATE wallets
-                    SET balance = balance - OLD.amount
-                    WHERE id = OLD.account_id;
+                    SET balance = balance + NEW.amount
+                    WHERE id = NEW.account_id;
                 END IF;
+                RETURN NEW;
             END IF;
-    
-            -- Altri casi di UPDATE (come già presenti)
-            -- Se l'importo cambia e la entry è confermata, bilancia l'importo differenziale
-            IF OLD.amount <> NEW.amount AND OLD.confirmed = true AND OLD.planned = false THEN
-                UPDATE wallets
-                SET balance = balance - OLD.amount + NEW.amount
-                WHERE id = NEW.account_id;
+            
+            -- Caso DELETE logico: sottrai l'importo dal bilancio se l'entry era confermata e non pianificata
+            IF TG_OP = 'UPDATE' THEN
+                -- Controlla se `deleted_at` è passato da NULL a un valore (soft delete)
+                IF OLD.deleted_at IS NULL AND NEW.deleted_at IS NOT NULL THEN
+                    IF OLD.confirmed = true AND OLD.planned = false THEN
+                        UPDATE wallets
+                        SET balance = balance - OLD.amount
+                        WHERE id = OLD.account_id;
+                    END IF;
+                END IF;
+                
+                -- Gestione cambio account_id
+                IF OLD.account_id <> NEW.account_id THEN
+                    -- Rimuovi l'importo dal vecchio account se era confermato e non pianificato
+                    IF OLD.confirmed = true AND OLD.planned = false THEN
+                        UPDATE wallets
+                        SET balance = balance - OLD.amount
+                        WHERE id = OLD.account_id;
+                    END IF;
+                    
+                    -- Aggiungi l'importo al nuovo account se è confermato e non pianificato
+                    IF NEW.confirmed = true AND NEW.planned = false THEN
+                        UPDATE wallets
+                        SET balance = balance + NEW.amount
+                        WHERE id = NEW.account_id;
+                    END IF;
+                ELSE
+                    -- Se l'importo cambia e la entry è confermata, bilancia l'importo differenziale
+                    IF OLD.amount <> NEW.amount AND OLD.confirmed = true AND OLD.planned = false THEN
+                        UPDATE wallets
+                        SET balance = balance - OLD.amount + NEW.amount
+                        WHERE id = NEW.account_id;
+                    END IF;
+                    
+                    -- Caso 1: planned cambia da true a false
+                    IF OLD.planned = true AND NEW.planned = false THEN
+                        UPDATE wallets
+                        SET balance = balance + NEW.amount
+                        WHERE id = NEW.account_id;
+                    END IF;
+                    
+                    -- Caso 2: planned cambia da false a true
+                    IF OLD.planned = false AND NEW.planned = true THEN
+                        UPDATE wallets
+                        SET balance = balance - NEW.amount
+                        WHERE id = NEW.account_id;
+                    END IF;
+                    
+                    -- Caso 3: confirmed cambia da true to false
+                    IF OLD.confirmed = true AND NEW.confirmed = false THEN
+                        UPDATE wallets
+                        SET balance = balance - NEW.amount
+                        WHERE id = NEW.account_id;
+                    END IF;
+                    
+                    -- Caso 4: confirmed cambia da false to true
+                    IF OLD.confirmed = false AND NEW.confirmed = true AND NEW.planned = false THEN
+                        UPDATE wallets
+                        SET balance = balance + NEW.amount
+                        WHERE id = NEW.account_id;
+                    END IF;
+                END IF;
+                
+                RETURN NEW;
             END IF;
-    
-            -- Caso 1: planned cambia da true a false
-            IF OLD.planned = true AND NEW.planned = false THEN
-                UPDATE wallets
-                SET balance = balance + NEW.amount
-                WHERE id = NEW.account_id;
-            END IF;
-    
-            -- Caso 2: planned cambia da false a true
-            IF OLD.planned = false AND NEW.planned = true THEN
-                UPDATE wallets
-                SET balance = balance - NEW.amount
-                WHERE id = NEW.account_id;
-            END IF;
-    
-            -- Caso 3: confirmed cambia da true a false
-            IF OLD.confirmed = true AND NEW.confirmed = false THEN
-                UPDATE wallets
-                SET balance = balance - NEW.amount
-                WHERE id = NEW.account_id;
-            END IF;
-    
-            -- Caso 4: confirmed cambia da false a true
-            IF OLD.confirmed = false AND NEW.confirmed = true AND OLD.planned = false THEN
-                UPDATE wallets
-                SET balance = balance + NEW.amount
-                WHERE id = NEW.account_id;
-            END IF;
-    
-            RETURN NEW;
-        END IF;
-    
-        RETURN NULL;
-    END;
-      $$ LANGUAGE plpgsql;";
+            
+            RETURN NULL;
+        END;
+        $$ LANGUAGE plpgsql;";
 
         $this->execute($stm);
         $this->execute("CREATE TRIGGER trigger_update_wallet_balance
