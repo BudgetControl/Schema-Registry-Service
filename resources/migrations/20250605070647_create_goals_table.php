@@ -27,6 +27,7 @@ final class CreateGoalsTable extends AbstractMigration
             ->addColumn('due_date', 'datetime')
             ->addColumn('status', \Phinx\Util\Literal::from('status'), ['default' => 'active'])
             ->addColumn('category_icon', 'string', ['null' => true])
+            ->addColumn('balance', 'decimal', ['precision' => 10, 'scale' => 2, 'default' => 0.00])
             ->addColumn('workspace_id','integer', [ 'signed' => false, 'null' => false])
             ->addColumn('created_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'datetime', ['null' => true])
