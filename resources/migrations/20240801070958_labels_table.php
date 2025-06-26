@@ -24,7 +24,7 @@ final class LabelsTable extends AbstractMigration
             ->addColumn('updated_at', 'datetime', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('uuid', 'string', ['limit' => 36, 'null' => false])
             ->addColumn('name', 'string', ['limit' => 255])
-            ->addColumn('color', 'string', ['limit' => 7])
+            ->addColumn('color', 'string', ['limit' => 10])
             ->addColumn('deleted_at', 'datetime', ['null' => true])
             ->addColumn('archive', 'boolean', ['default' => false])
             ->addColumn('workspace_id','integer', [ 'signed' => false, 'null' => false])
