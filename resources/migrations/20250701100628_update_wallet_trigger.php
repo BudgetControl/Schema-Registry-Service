@@ -29,7 +29,8 @@ final class UpdateWalletTrigger extends AbstractMigration
 
     -- Ignora le entry di tipo saving
         IF (TG_OP = 'INSERT' AND NEW.type = 'saving') OR 
-            (TG_OP = 'UPDATE' AND NEW.type = 'saving') THEN
+           (TG_OP = 'UPDATE' AND (NEW.type = 'saving' OR OLD.type = 'saving')) OR
+           (TG_OP = 'DELETE' AND OLD.type = 'saving') THEN
             RETURN NEW;
         END IF;
 

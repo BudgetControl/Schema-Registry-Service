@@ -48,8 +48,8 @@ final class CreateGoalsBalanceTrigers extends AbstractMigration
                     WHERE id = OLD.goal_id;
 
                     UPDATE wallets
-    			  SET balance = balance + OLD.amount
-    			  WHERE id = OLD.account_id;
+                    SET balance = balance + OLD.amount
+                    WHERE id = OLD.account_id;
                 END IF;
             END IF;
     
