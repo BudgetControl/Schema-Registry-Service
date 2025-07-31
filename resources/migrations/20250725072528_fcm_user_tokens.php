@@ -19,11 +19,20 @@ final class FcmUserTokens extends AbstractMigration
      */
     public function up(): void
     {
+        //Create platform enumeration
+        $this->execute("CREATE TYPE platform AS ENUM ('android', 'ios', 'web');");
+
         $table = $this->table('fcm_tokens');
         $table
             ->addColumn('user_id', 'integer', ['null' => false])
             ->addColumn('token', 'text', ['null' => false])
             ->addColumn('device_info', 'text', ['null' => true])
+            ->addColumn('platform', \Phinx\Util\Literal::from('platform'), [
+                'null' => false
+            ])
+            ->addColumn('lang', \Phinx\Util\Literal::from('lang'), [
+                'null' => false
+            ])
             ->addColumn('created_at', 'datetime', [
             'default' => 'CURRENT_TIMESTAMP',
             'null' => false
@@ -43,6 +52,7 @@ final class FcmUserTokens extends AbstractMigration
 
     public function down(): void
     {
+        $this->execute("DROP TYPE IF EXISTS platform;");
         $this->table('fcm_tokens')->drop()->save();
     }
 
