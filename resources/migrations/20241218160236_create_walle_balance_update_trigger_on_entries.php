@@ -20,7 +20,7 @@ final class CreateWalleBalanceUpdateTriggerOnEntries extends AbstractMigration
     public function up(): void
     {
 
-      $stm = "CREATE OR REPLACE FUNCTION update_wallet_balance()
+        $stm = "CREATE OR REPLACE FUNCTION update_wallet_balance()
       RETURNS TRIGGER AS $$
       BEGIN
 
@@ -99,10 +99,11 @@ final class CreateWalleBalanceUpdateTriggerOnEntries extends AbstractMigration
         try {
             $this->execute("DROP TRIGGER trigger_update_wallet_balance ON entries;");
             $this->execute("DROP FUNCTION update_wallet_balance;");
+            $this->execute('COMMIT;');
         } catch (\Exception $e) {
-            // Handle the case where the trigger or function does not exist
-            // This is optional, but can help avoid migration errors if the trigger/function was never created
+            $this->execute('ROLLBACK;');
+            // Puoi scegliere se rilanciare l'eccezione o gestirla silenziosamente
+
         }
-       
     }
 }
