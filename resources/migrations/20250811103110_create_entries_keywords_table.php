@@ -42,6 +42,11 @@ final class CreateEntriesKeywordsTable extends AbstractMigration
 
         // Add GIN index for full-text search on 'keyword' column
         $this->execute('CREATE INDEX idx_keyword_fulltext ON entries_keywords USING GIN (to_tsvector(\'english\', keyword))');
+
+        $this->table('entries')->addColumn('has_keywords', 'boolean', [
+            'default' => false,
+            'null' => false
+        ])->update();
     }
 
     public function down(): void
