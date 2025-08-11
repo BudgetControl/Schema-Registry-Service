@@ -39,8 +39,8 @@ final class CreateEntriesKeywordsTable extends AbstractMigration
             ])
             ->create();
 
-        // Add FULLTEXT index to 'keyword' column
-        $this->execute('ALTER TABLE entries_keywords ADD FULLTEXT INDEX idx_keyword_fulltext (keyword)');
+        // Add GIN index for full-text search on 'keyword' column
+        $this->execute('CREATE INDEX idx_keyword_fulltext ON entries_keywords USING GIN (to_tsvector(\'english\', keyword))');
     }
 
     public function down(): void
