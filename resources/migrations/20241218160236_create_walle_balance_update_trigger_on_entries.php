@@ -96,7 +96,13 @@ final class CreateWalleBalanceUpdateTriggerOnEntries extends AbstractMigration
 
     public function down(): void
     {
-        $this->execute("DROP TRIGGER trigger_update_wallet_balance ON entries;");
-        $this->execute("DROP FUNCTION update_wallet_balance;");
+        try {
+            $this->execute("DROP TRIGGER trigger_update_wallet_balance ON entries;");
+            $this->execute("DROP FUNCTION update_wallet_balance;");
+        } catch (\Exception $e) {
+            // Handle the case where the trigger or function does not exist
+            // This is optional, but can help avoid migration errors if the trigger/function was never created
+        }
+       
     }
 }
