@@ -52,8 +52,8 @@ final class FcmUserTokens extends AbstractMigration
 
     public function down(): void
     {
-        $this->execute("DROP TYPE IF EXISTS platform;");
         $this->table('fcm_tokens')->drop()->save();
+        $this->execute("DROP TYPE IF EXISTS platform;");
     }
 
 }
