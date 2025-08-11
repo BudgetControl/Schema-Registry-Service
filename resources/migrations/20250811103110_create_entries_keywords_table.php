@@ -24,7 +24,6 @@ final class CreateEntriesKeywordsTable extends AbstractMigration
             ->addColumn('entry_id', 'integer', ['null' => false])
             ->addColumn('keyword', 'text', ['null' => false])
             ->addColumn('score', 'float', ['default' => 0, 'null' => false])
-            ->addColumn('last_used_at', 'datetime', ['null' => true])
             ->addColumn('created_at', 'datetime', [
                 'default' => 'CURRENT_TIMESTAMP',
                 'null' => false
