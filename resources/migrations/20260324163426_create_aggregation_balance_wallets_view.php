@@ -22,7 +22,7 @@ final class CreateAggregationBalanceWalletsView extends AbstractMigration
         $sql = "CREATE OR REPLACE VIEW aggregated_balances AS
                 SELECT
                     w.*,
-                    totals.wallet_balance,
+                    totals.balance,
                     totals.payee_balance,
                     totals.goal_balance
                 FROM wallets w
@@ -37,7 +37,7 @@ final class CreateAggregationBalanceWalletsView extends AbstractMigration
                                 AND e.deleted_at IS NULL
                                 THEN e.amount ELSE 0
                             END
-                        ), 0) AS wallet_balance,
+                        ), 0) AS balance,
                         COALESCE(SUM(
                             CASE
                                 WHEN e.type = 'debit' 
