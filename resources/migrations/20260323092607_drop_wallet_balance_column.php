@@ -19,13 +19,13 @@ final class DropWalletBalanceColumn extends AbstractMigration
      */
     public function up(): void
     {
-        $sql = "ALTER TABLE wallets DROP COLUMN balance";
+        $sql = "ALTER TABLE wallets RENAME COLUMN balance TO old_balance";
         $this->execute($sql);
     }
 
     public function down(): void
     {
-        $sql = "ALTER TABLE wallets ADD COLUMN balance DECIMAL(15, 2) NOT NULL DEFAULT 0";
+        $sql = "ALTER TABLE wallets RENAME COLUMN old_balance TO balance";
         $this->execute($sql);
     }
 }
