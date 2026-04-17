@@ -14,5 +14,7 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {}
+    "require": {
+        "robmorgan/phinx": "^0.16.2"
+    }
 }
