@@ -14,7 +14,7 @@
 /tmp/tests/*
 !/tmp/tests/empty
 
-/logs/*
+storage/logs/*
 !/logs/empty
 
 # CakePHP 2

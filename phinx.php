@@ -11,8 +11,8 @@ return [
         'default' => [
             'adapter' => 'pgsql',
             'host'    => getenv('DB_HOST') ?: 'localhost',
-            'name'    => getenv('DB_NAME') ?: 'budgetcontrol',
-            'user'    => getenv('DB_USER') ?: 'postgres',
+            'name'    => getenv('DB_DATABASE') ?: 'budgetcontrol',
+            'user'    => getenv('DB_USERNAME') ?: 'postgres',
             'pass'    => getenv('DB_PASSWORD') ?: '',
             'port'    => getenv('DB_PORT') ?: '5432',
         ],
