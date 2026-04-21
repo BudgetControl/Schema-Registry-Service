@@ -1,0 +1,40 @@
+{
+    "name": "PHP 8.3 Development Environment",
+    "image": "mcr.microsoft.com/devcontainers/php:8.3",
+    
+    "features": {
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/composer:1": {}
+    },
+    
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bmewburn.vscode-intelephense-client",
+                "xdebug.php-debug",
+                "neilbrayfield.php-docblocker",
+                "mehedidracula.php-namespace-resolver",
+                "ikappas.phpcs",
+                "devsense.composer-php-vscode"
+            ],
+            "settings": {
+                "php.validate.enable": true,
+                "php.suggest.basic": false,
+                "intelephense.files.maxSize": 5000000
+            }
+        }
+    },
+    
+    "postCreateCommand": "composer install",
+    
+    "forwardPorts": [8000, 8080],
+    
+    "portsAttributes": {
+        "8000": {
+            "label": "PHP Built-in Server",
+            "onAutoForward": "notify"
+        }
+    },
+    
+    "remoteUser": "vscode"
+}
