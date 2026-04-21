@@ -1,6 +1,6 @@
 {
     "name": "PHP 8.3 Development Environment",
-    "image": "mlabfactory/php8-apache:v1.4.1-xdebug",
+    "image": "mcr.microsoft.com/devcontainers/php:8.3",
     
     "features": {
         "ghcr.io/devcontainers/features/git:1": {},
