@@ -4,7 +4,6 @@
     
     "features": {
         "ghcr.io/devcontainers/features/git:1": {},
-        "ghcr.io/devcontainers/features/composer:1": {}
     },
     
     "customizations": {
@@ -24,8 +23,6 @@
             }
         }
     },
-    
-    "postCreateCommand": "composer install",
     
     "forwardPorts": [8000, 8080],
     
