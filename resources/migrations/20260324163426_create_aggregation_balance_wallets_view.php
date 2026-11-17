@@ -22,7 +22,7 @@ final class CreateAggregationBalanceWalletsView extends AbstractMigration
         $sql = "CREATE OR REPLACE VIEW aggregated_balances AS
                 SELECT
                     w.*,
-                    totals.balance,
+                    totals.balance AS aggregated_balance,
                     totals.payee_balance,
                     totals.goal_balance
                 FROM wallets w
